@@ -1,9 +1,11 @@
 const router = require("express").Router();
 
-router.get("/", (req, res, next) => {
-  res.status(200).json({
-    message: "Welcome to NanoURL API",
-  });
-});
+const urlController = require('../controllers/url-controller');
+
+// API Home Page Route
+router.get("/", urlController.getBasePage);
+
+// Store New Short URL : POST
+router.post("/short-url", urlController.postShortUrl);
 
 module.exports = router;
