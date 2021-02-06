@@ -3,9 +3,11 @@ const mongoose = require("mongoose");
 
 const nanourlRoutes = require("./routes/routes");
 const db = require("./config/default.json").MONGO_URI;
-
+const cors = require('cors');
 const app = express();
 
+app.use(cors());
+app.options('*',cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use("/api", nanourlRoutes);
