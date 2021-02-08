@@ -11,8 +11,7 @@ const App = () => {
 					"Content-Type":"application/json"
 				},
 				body: JSON.stringify({
-					longUrl:link,
-					shortCode: "a1b1c1"
+					longUrl:link
 				})
 			}
 		);
