@@ -9,20 +9,24 @@ function HomeScreen() {
         const dispatch = useDispatch();
         const {loading, links, error} = useSelector(state => state.links_list);
         const [url, set_url] = useState('');
+        const [error_message ,set_error_message] = useState('');
 
         useEffect(() => {
                 dispatch(get_links_action());        
-        },[]);
+        },[dispatch]);
+
+        useEffect(() => {
+                set_error_message(error);
+        },[error]);
 
         const handle_submit = e => {
                 e.preventDefault();
-
         }
 
         return (
                 <div>
                         
-                     {loading ? <LoadingSpinner /> : error ? <Alert variant='danger'>{error}</Alert> : (
+                     {loading ? <LoadingSpinner /> : error ? <Alert variant='danger'>{error_message}</Alert> : (
                              <>
                                 <FormContainer>
                                       
@@ -33,7 +37,7 @@ function HomeScreen() {
                                                                         <Form.Control required type='text' placeholder='Enter URL' value={url} onChange={e => set_url(e.target.value)}></Form.Control>
                                                         </Form.Group>
 
-                                                        <Button disabled={!url} type='submit' variant='primary'>Submit</Button>
+                                                        <Button disabled={!url || !(/((?:(?:http?|ftp)[s]*:\/\/)?[a-z0-9-%\/\&=?\.]+\.[a-z]{2,4}\/?([^\s<>\#%"\,\{\}\\|\\\^\[\]`]+)?)/gi).test(url)} type='submit' variant='primary'>Submit</Button>
                                                 </Form>
                                        
                                        
