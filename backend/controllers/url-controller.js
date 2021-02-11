@@ -36,8 +36,6 @@ exports.postShortUrl = async (req, res, next) => {
     
   
   const new_index = JSON.parse( await index.value) + 1;
-  await mc.set('index', `${new_index}`);
-  console.log(new_index)
   
   const shortCode = id_to_base62.id_to_base62(new_index);
 
@@ -54,6 +52,8 @@ exports.postShortUrl = async (req, res, next) => {
   }
 
   if (urlIsValid) {
+    await mc.set('index', `${new_index}`);
+    console.log(new_index);
     urlModel
       .create({
         longUrl: longUrl,
