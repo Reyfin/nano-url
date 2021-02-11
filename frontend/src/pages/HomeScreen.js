@@ -30,9 +30,6 @@ function HomeScreen() {
                 } catch (err) {
                         alert(err.response.data.message);
                 }    
-                
-                set_url('');
-                dispatch(get_links_action());
                
         }
 
