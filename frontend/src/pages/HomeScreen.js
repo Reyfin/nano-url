@@ -4,6 +4,7 @@ import LoadingSpinner from '../components/LoadingSpinner';
 import FormContainer from '../components/FormContainer';
 import { Table, Alert, Form, Button } from 'react-bootstrap';
 import { get_links_action } from '../actions/LinkActions';
+import axios from 'axios';
 
 function HomeScreen() {
         const dispatch = useDispatch();
@@ -19,8 +20,20 @@ function HomeScreen() {
                 set_error_message(error);
         },[error]);
 
-        const handle_submit = e => {
+        const handle_submit = async e => {
                 e.preventDefault();
+                try {
+                        const resp = await axios.post('http://localhost:5000/api/short-url/', {longUrl: url})
+                        alert(await resp.data.message);
+                        set_url('');
+                        dispatch(get_links_action());
+                } catch (err) {
+                        alert(err.response.data.message);
+                }    
+                
+                set_url('');
+                dispatch(get_links_action());
+               
         }
 
         return (
