@@ -1,4 +1,5 @@
-var urlExists = require("url-exists");
+const util = require('util');
+const urlExists = util.promisify(require('url-exists'));
 
 const urlModel = require("../models/url-model");
 const id_to_base62 = require("../algorithm/conversionAlgo");
@@ -23,18 +24,8 @@ exports.postShortUrl = async (req, res, next) => {
   const { longUrl } = req.body;
   const shortCode = id_to_base62.id_to_base62(longUrl.length);
 
-  const urlIsValid = await urlExists(longUrl, function (err, exists) {
-    // console.log(exists); // true
-    if (err) {
-      return false;
-    }
-    return true;
-  });
-  // const urlExists = await urlExists(longUrl, (err) => {
-  //   if (err) return false;
-  //   return true;
-  // });
-
+  let urlIsValid = await urlExists(longUrl);
+  
   let URL = await urlModel.findOne({
     longUrl: { $regex: new RegExp("^" + longUrl + "$", "i") },
   });
@@ -46,7 +37,6 @@ exports.postShortUrl = async (req, res, next) => {
   }
 
   if (urlIsValid) {
-    console.log(urlExists);
     urlModel
       .create({
         longUrl: longUrl,
